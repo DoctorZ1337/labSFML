@@ -1,24 +1,14 @@
 ﻿#include <SFML/Graphics.hpp>
+#include <Circle.hpp>
+#include <Game.hpp>
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    sz::Game game(1600, 900, "Game :D");
+    game.setupGame();
 
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+    game.LifeCycle();
 
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
 
     return 0;
 }
