@@ -4,6 +4,7 @@
 
 namespace sz
 {
+
 	// Круг
 	class Circle
 	{
@@ -29,6 +30,10 @@ namespace sz
 			m_shape.setRadius(m_r);
 			m_shape.setPosition(m_x, m_y);
 			m_shape.setFillColor(sf::Color::Green);
+		}
+
+		void setRandomColor() {
+			m_shape.setFillColor(sf::Color::Color(rand() % 256, rand() % 256, rand() % 256, 255));
 		}
 
 		sf::CircleShape getCircle() {
@@ -80,6 +85,10 @@ namespace sz
 			m_shape.setFillColor(sf::Color::Blue);
 		}
 
+		void setRandomColor() {
+			m_shape.setFillColor(sf::Color::Color(rand() % 256, rand() % 256, rand() % 256, 255));
+		}
+
 		sf::RectangleShape getSquare() {
 			return m_shape;
 		}
@@ -101,49 +110,53 @@ namespace sz
 		}
 	};
 
+	// Равнобедренный треугольник
 	class Triangle
 	{
-		float m_base;
-		float m_height;
+		float m_a;
 		float m_x, m_y;
 		float m_v;
 		float m_gamma;
-		sf::CircleShape m_shape;
+		sf::ConvexShape m_shape;
 
 	public:
 		Triangle() = default;
 
-		Triangle(float x, float y, float base, float height, float v, float gamma)
+		Triangle(float x, float y, float a, float v, float gamma)
 		{
-			setupTriangle(x, y, base, height, v, gamma);
+			setupTriangle(x, y, a, v, gamma);
 		}
 
-		void setupTriangle(float x, float y, float base, float height, float v, float gamma)
+		void setupTriangle(float x, float y, float a, float v, float gamma)
 		{
 			m_x = x;
 			m_y = y;
-			m_base = base;
-			m_height = height;
+			m_a = a;
 			m_v = v;
 			m_gamma = gamma;
 
-			m_shape.setRadius(m_height / 2.0f);
 			m_shape.setPointCount(3);
-			m_shape.setOrigin(m_height / 2.0f, m_height / 2.0f);
+			m_shape.setPoint(0, sf::Vector2f(-m_a / 2, -m_a / 2));
+			m_shape.setPoint(1, sf::Vector2f(m_a / 2, -m_a / 2));
+			m_shape.setPoint(2, sf::Vector2f(0, m_a / 2));
 
+			m_shape.setOrigin(0, 0);  
 			m_shape.setPosition(m_x, m_y);
 			m_shape.setFillColor(sf::Color::Red);
 		}
 
-		sf::CircleShape getTriangle()
+		void setRandomColor() {
+			m_shape.setFillColor(sf::Color::Color(rand() % 256, rand() % 256, rand() % 256, 255));
+		}
+
+		sf::ConvexShape getTriangle()
 		{
 			return m_shape;
 		}
 
 		float X() { return m_x; }
 		float Y() { return m_y; }
-		float Base() { return m_base; }
-		float Height() { return m_height; }
+		float A() { return m_a; }
 		float Gamma() { return m_gamma; }
 
 		void Gamma(float gamma)
