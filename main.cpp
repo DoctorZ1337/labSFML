@@ -9,6 +9,5 @@ int main()
 
     game.LifeCycle();
 
-
     return 0;
 }

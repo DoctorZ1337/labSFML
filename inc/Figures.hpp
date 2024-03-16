@@ -15,7 +15,7 @@ namespace sz
 		sf::CircleShape m_shape;
 	public:
 		Circle() = default;
-		
+
 		Circle(float x, float y, float r, float v, float alfa) {
 			setupCircle(x, y, r, v, alfa);
 		}
@@ -40,10 +40,21 @@ namespace sz
 			return m_shape;
 		}
 
+		void setX(float newX) {
+			m_x = newX;
+		}
+
+		void setY(float newY) {
+			m_y = newY;
+		}
+
 		float X() { return m_x; }
 		float Y() { return m_y; }
 		float R() { return m_r; }
 		float Alfa() { return m_alfa; }
+		float Vx() { return m_v * cos(m_alfa); };
+		float Vy() { return m_v * sin(m_alfa); }
+
 		void Alfa(float alfa) {
 			m_alfa = alfa;
 		}
@@ -93,6 +104,14 @@ namespace sz
 			return m_shape;
 		}
 
+		void setX(float newX) {
+			m_x = newX;
+		}
+
+		void setY(float newY) {
+			m_y = newY;
+		}
+
 		float X() { return m_x; }
 		float Y() { return m_y; }
 		float Side() { return m_side; }
@@ -140,7 +159,7 @@ namespace sz
 			m_shape.setPoint(1, sf::Vector2f(m_a / 2, -m_a / 2));
 			m_shape.setPoint(2, sf::Vector2f(0, m_a / 2));
 
-			m_shape.setOrigin(0, 0);  
+			m_shape.setOrigin(0, 0);
 			m_shape.setPosition(m_x, m_y);
 			m_shape.setFillColor(sf::Color::Red);
 		}
@@ -152,6 +171,14 @@ namespace sz
 		sf::ConvexShape getTriangle()
 		{
 			return m_shape;
+		}
+
+		void setX(float newX) {
+			m_x = newX;
+		}
+
+		void setY(float newY) {
+			m_y = newY;
 		}
 
 		float X() { return m_x; }

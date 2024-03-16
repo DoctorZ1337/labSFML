@@ -5,6 +5,7 @@
 namespace sz
 {
 	const float pi = acos(-1);
+	int hitCount = 0;
 
 	class Game {
 		int m_width;
@@ -14,6 +15,10 @@ namespace sz
 		sz::Square m_s;
 		sz::Triangle m_t;
 		sf::RenderWindow m_window;
+		sf::Color getRandomColor() {
+			return sf::Color(rand() % 256, rand() % 256, rand() % 256, 255);
+		}
+		sf::Color m_backgroundColor;
 
 	public:
 		Game(int width, int height, const std::string& capture) {
@@ -32,13 +37,13 @@ namespace sz
 			int r = rand() % 100 + 10;
 			int x = rand() % (m_width - 2 * r) + r;
 			int y = rand() % (m_height - 2 * r) + r;
-			int c_v = rand() % 360;
+			int c_v = 900000;
 			float alfa = 5 + rand() % 2;
 			m_c.setupCircle(x, y, r, c_v, alfa);
 
 			// Настройка параметров квадрата
 			int side = rand() % 80 + 20;
-			int s_v = rand() % 360;
+			int s_v = rand() % 360 + 50;
 			float beta = 5 + rand() % 2;
 			int s_x = rand() % (m_width - 2 * side) + side;
 			int s_y = rand() % (m_height - 2 * side) + side;
@@ -46,7 +51,7 @@ namespace sz
 
 			// Настройка параметров треугольника
 			int t_a = rand() % 80 + 20;
-			int t_v = rand() % 360;
+			int t_v = rand() % 360 + 50;
 			float gamma = 5 + rand() % 2;
 			int t_x = rand() % (m_width - 2 * t_a) + t_a;
 			int t_y = rand() % (m_height - 2 * t_a) + t_a;
@@ -58,16 +63,31 @@ namespace sz
 			float y = obj.Y();
 			float r = obj.R();
 
-			if (x + r >= m_width || x - r <= 0) {
+			if (x + r >= m_width) {
+				obj.setX(m_width - r);
 				obj.Alfa(pi - obj.Alfa());
 				obj.setRandomColor();
+				++hitCount;
+			}
+			else if (x - r <= 0) {
+				obj.setX(r);
+				obj.Alfa(pi - obj.Alfa());
+				obj.setRandomColor();
+				++hitCount;
 			}
 
-			if (y + r >= m_height || y - r <= 0) {
+			if (y + r >= m_height) {
+				obj.setY(m_height - r);
 				obj.Alfa(2 * pi - obj.Alfa());
 				obj.setRandomColor();
+				++hitCount;
 			}
-
+			else if (y - r <= 0) {
+				obj.setY(r);
+				obj.Alfa(2 * pi - obj.Alfa());
+				obj.setRandomColor();
+				++hitCount;
+			}
 		}
 
 		void touchBorder(Square& obj) {
@@ -76,27 +96,29 @@ namespace sz
 			float side = obj.Side();
 
 			if (x + side / 2 >= m_width) {
-				// Столкновение с правой границей
+				obj.setX(m_width - side / 2);
 				obj.Beta(pi - obj.Beta());
 				obj.setRandomColor();
+				++hitCount;
 			}
-
-			if (x - side / 2 <= 0) {
-				// Столкновение с левой границей
+			else if (x - side / 2 <= 0) {
+				obj.setX(side / 2);
 				obj.Beta(pi - obj.Beta());
 				obj.setRandomColor();
+				++hitCount;
 			}
 
 			if (y + side / 2 >= m_height) {
-				// Столкновение с нижней границей
-				obj.Beta(-obj.Beta());
+				obj.setY(m_height - side / 2);
+				obj.Beta(2 * pi - obj.Beta());
 				obj.setRandomColor();
+				++hitCount;
 			}
-
-			if (y - side / 2 <= 0) {
-				// Столкновение с верхней границей
-				obj.Beta(-obj.Beta());
+			else if (y - side / 2 <= 0) {
+				obj.setY(side / 2);
+				obj.Beta(2 * pi - obj.Beta());
 				obj.setRandomColor();
+				++hitCount;
 			}
 		}
 
@@ -105,28 +127,30 @@ namespace sz
 			float y = obj.Y();
 			float a = obj.A();
 
-			if (x + a / 2.0f >= m_width) {
-				// Столкновение с правой границей
+			if (x + a / 2 >= m_width) {
+				obj.setX(m_width - a / 2);
 				obj.Gamma(pi - obj.Gamma());
 				obj.setRandomColor();
+				++hitCount;
 			}
-
-			if (x - a / 2.0f <= 0) {
-				// Столкновение с левой границей
+			else if (x - a / 2 <= 0) {
+				obj.setX(a / 2);
 				obj.Gamma(pi - obj.Gamma());
 				obj.setRandomColor();
+				++hitCount;
 			}
 
-			if (y + a / 2.0f >= m_height) {
-				// Столкновение с нижней границей
-				obj.Gamma(2.0f * pi - obj.Gamma());
+			if (y + a / 2 >= m_height) {
+				obj.setY(m_height - a / 2);
+				obj.Gamma(2 * pi - obj.Gamma());
 				obj.setRandomColor();
+				++hitCount;
 			}
-
-			if (y - a / 2.0f <= 0) {
-				// Столкновение с верхней границей
-				obj.Gamma(2.0f * pi - obj.Gamma());
+			else if (y - a / 2 <= 0) {
+				obj.setY(a / 2);
+				obj.Gamma(2 * pi - obj.Gamma());
 				obj.setRandomColor();
+				++hitCount;
 			}
 		}
 
@@ -181,13 +205,17 @@ namespace sz
 				touchBorder(m_t);
 
 				// Отображение
-				m_window.clear();
+				if (hitCount >= 3) {
+					m_backgroundColor = getRandomColor();
+
+					hitCount = 0;
+				}
+				m_window.clear(m_backgroundColor);
 				m_window.draw(m_c.getCircle());
 				m_window.draw(m_s.getSquare());
 				m_window.draw(m_t.getTriangle());
 				m_window.display();
 			}
-
 		}
 	};
 }
