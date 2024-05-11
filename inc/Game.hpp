@@ -37,7 +37,7 @@ namespace sz
 			int r = rand() % 100 + 10;
 			int x = rand() % (m_width - 2 * r) + r;
 			int y = rand() % (m_height - 2 * r) + r;
-			int c_v = 900000;
+			int c_v = rand() % 360 + 50;
 			float alfa = 5 + rand() % 2;
 			m_c.setupCircle(x, y, r, c_v, alfa);
 

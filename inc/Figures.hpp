@@ -12,6 +12,8 @@ namespace sz
 		float m_x, m_y;
 		float m_v;
 		float m_alfa;
+		float m_vx = m_v * cos(m_alfa);
+		float m_vy = m_v * sin(m_alfa);
 		sf::CircleShape m_shape;
 	public:
 		Circle() = default;
@@ -40,6 +42,13 @@ namespace sz
 			return m_shape;
 		}
 
+		float X() { return m_x; }
+		float Y() { return m_y; }
+		float R() { return m_r; }
+		float Alfa() { return m_alfa; }
+		float Vx() { return m_vx; }
+		float Vy() { return m_vy; }
+
 		void setX(float newX) {
 			m_x = newX;
 		}
@@ -48,12 +57,13 @@ namespace sz
 			m_y = newY;
 		}
 
-		float X() { return m_x; }
-		float Y() { return m_y; }
-		float R() { return m_r; }
-		float Alfa() { return m_alfa; }
-		float Vx() { return m_v * cos(m_alfa); };
-		float Vy() { return m_v * sin(m_alfa); }
+		void setVx(float vx) {
+			m_vx = vx;
+		}
+
+		void setVy(float vy) {
+			m_vy = vy;
+		}
 
 		void Alfa(float alfa) {
 			m_alfa = alfa;
@@ -201,3 +211,17 @@ namespace sz
 		}
 	};
 }
+// main
+/*#include <SFML/Graphics.hpp>
+#include <Figures.hpp>
+#include <Game.hpp>
+
+int main()
+{
+    sz::Game game(600, 600, "Game :D");
+    game.setupGame();
+
+    game.LifeCycle();
+
+    return 0;
+}*/
